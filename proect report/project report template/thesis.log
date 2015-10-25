@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.21)  25 OCT 2015 21:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.21)  25 OCT 2015 21:12
 entering extended mode
 **thesis.tex
 (thesis.tex
@@ -312,7 +312,7 @@ Chapter 2.
 <good.png, id=32, 287.0725pt x 365.365pt>
 File: good.png Graphic file (type png)
  <use good.png>
-Package pdftex.def Info: good.png used on input line 173.
+Package pdftex.def Info: good.png used on input line 172.
 (pdftex.def)             Requested size: 142.26378pt x 181.06529pt.
  [3
 
@@ -329,7 +329,7 @@ Missing character: There is no ‚ in font ptmr7t!
 Missing character: There is no Ä in font ptmr7t!
 Missing character: There is no ù in font ptmr7t!
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 234.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 233.
 [6
 
 ]
@@ -367,7 +367,7 @@ TeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><d:/Program Files/MiKTeX 2.9/fonts/t
 ype1/urw/times/utmb8a.pfb><d:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/ut
 mr8a.pfb><d:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><d:/Prog
 ram Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on thesis.pdf (16 pages, 190870 bytes).
+Output written on thesis.pdf (16 pages, 190566 bytes).
 PDF statistics:
  86 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
