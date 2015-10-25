@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.21)  25 OCT 2015 20:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.21)  25 OCT 2015 21:05
 entering extended mode
 **thesis.tex
 (thesis.tex
@@ -300,7 +300,7 @@ LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 117.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 127.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 133.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 130.
 
 
 ("d:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
@@ -353,11 +353,11 @@ Appendix B.
 \tf@thm=\write7
  (thesis.aux) ) 
 Here is how much of TeX's memory you used:
- 2935 strings out of 493673
- 36780 string characters out of 3143968
+ 2934 strings out of 493673
+ 36774 string characters out of 3143968
  94734 words of memory out of 3000000
  6203 multiletter control sequences out of 15000+200000
- 34018 words of font info for 78 fonts, out of 3000000 for 9000
+ 32940 words of font info for 77 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  27i,10n,26p,254b,278s stack positions out of 5000i,500n,10000p,200000b,50000s
 {d:/Program Files/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<d:
@@ -367,7 +367,7 @@ TeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><d:/Program Files/MiKTeX 2.9/fonts/t
 ype1/urw/times/utmb8a.pfb><d:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/ut
 mr8a.pfb><d:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><d:/Prog
 ram Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on thesis.pdf (16 pages, 190651 bytes).
+Output written on thesis.pdf (16 pages, 190870 bytes).
 PDF statistics:
  86 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
