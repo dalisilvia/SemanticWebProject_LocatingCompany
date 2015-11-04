@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<p id="namePosition">name: </p>
+<p id="agePosition">age: </p>
+
+
+
+<script type="text/javascript">  
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+	vars[key] = value;
+	});
+	return vars;
+	}
+
+
+var name = getUrlVars()["25"];
+var age = getUrlVars()["age"]
+document.getElementById("namePosition").innerHTML += name;
+document.getElementById("agePosition").innerHTML += age;
+
+
+
+
+</script>
+
+
+</body>
+</html>
