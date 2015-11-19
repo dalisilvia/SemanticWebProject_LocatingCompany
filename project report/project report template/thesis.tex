@@ -60,9 +60,6 @@
 \def\MIPALL#1#2{\textit{MIPS}_{#1}\left(#2\right)} % the set of all mips
 
 
-
-
-
 \begin{document}
 
 \pagenumbering{roman}
@@ -70,9 +67,9 @@
 \begin{titlepage}
 	\vspace*{2cm}
   \begin{center}
-   {\Huge Locating Companies \\}
+   {\Huge Finding Generic Drugs \\}
 	\vspace*{0.5cm}
-   {\large  interlinking ProductDB with DBPedia based on product categories \\}
+   {\large  interlinking DBPedia with FreeDB based on drug brands \\}
    \vspace{2cm} 
    \vspace{2cm}
    {written by\\
@@ -92,11 +89,11 @@
 \tableofcontents
 \newpage
 
-\listofalgorithms
+%\listofalgorithms %TODO: we dont need it
 
-\listoffigures
+%\listoffigures %TODO: we dont need it
 
-\listoftables
+%\listoftables %TODO: we dont need it
 
 % evntuelly you might add something like this
 % \listtheorems{definition}
@@ -108,176 +105,147 @@
 % okay, start new numbering ... here is where it really starts
 \pagenumbering{arabic}
 
+% Legend:
+% TODO: 		general todo, doesnt matter who takes care of it
+% TODO M: 	todo for Markus
+% TODO S: 	todo for Silvia
+
+
 \chapter{Application domain and goals}
-\label{cha:goal}
+\label{cha:domain}
+This documents describes the development of a generics search engine, based on the publicly available knowledge bases DBPedia\footnote{\url{www.dbpedia.org}} and FreeBase\footnote{\url{www.freebase.com}}. Furthermore it discusses the limitations of the corresponding TRL6\footnote{Technology Readiness Level \url{http://resources.sei.cmu.edu/library/asset-view.cfm?assetID=5835}} prototype and contains proposals for further development.
 
-Most of the text in this example of a master thesis is quote from 'The Extremes of Good and Evil' (Cicero). Besides this text you find some usage examples in the following sections.
-
-\begin{itemize}
-	\item A table can be found in Section \ref{sec:query}. This example (Table \ref{tab:confonly}) is only a suggestion. You are allowed to format your tables in your preferred style.
-	\item An example of an algorithm is depicted in Section \ref{sec:challenge}. Again, you are allowed to use a different style for algorithms, but the style we used to display Algorithm \ref{cha:dataset} looks quite nice.
-	\item Chapter \ref{cha:example} demontrates how to refer to chapters and algorithms and other elements of your thesis.
-	\item You should always place definitions, propositions, and whatever might be useful in an appropriate environment.  Examples can be found in section \ref{sec:idea}.
-\end{itemize}
+\paragraph{Problem} \label{sec:problem}
+% Which user information needs are addressed
+Currently people are forced to rely on expert opinion to find a substitute, e.g a cheaper alternative, to their medication. Since many experts, like doctors or pharmacists, are granted benefits from pharmaceutical companies their judgment is often assorted to be biased.
+Furthermore drugs often have fantasy names, due to marketing reasons. This is in particular the case for over-the-counter drugs. Therefore a comparison is only possible based ingredients.
+In case of drugs without patent protection this potentially results in filtering thousands of different drugs by their ingredients. Needless to say that even well informed an unbiased expert will not know all generics by heart.
 
 
 
-
- 
-\section{Targeted Users}
- 
-it's  a footnote and url
-\footnote{\url{http://productdb.org/}}
-
-
-Tutorials\footnote{\url{http://latex.hpfsc.de}}.  
+\paragraph{Solution} 
+%\paragraph{Target group}\label{sec:users}
+% Which users are targeted?
+The search engine is designed for private individuals, without any medical expert knowledge.
+\label{sec:solution} % Which user problems are solved?
+ By entering a drug brand name or active substance the prototype will return a list of identical substitute drugs and their corresponding drug manufacturers.
 
 
-\section{Problems Description}
-
- 
-
-\section{Demand Analysis}
+% \section{Demand Analysis} %TODO S: what is this section?
 
 
 
-\chapter{Datasets used}
-\label{cha:dataset}
+\chapter{Datasets}
+\label{cha:datasets}
+
+\paragraph{Datasets used}
+\label{sec:datasets_used}
+% which datasets does the application use
+
+\subparagraph{DBPedia}
+\label{dbpedia}
+% TODO S: describe DBPedia (important: dont copy and paste + cite correctly!)
+
+\subparagraph{FreeBase}
+\label{freebase}
+% TODO S: describe FreeBase (important: dont copy and paste + cite correctly!)
+
+\paragraph{Access methods}
+\label{sec:access_methods}
+% how are they accessed
+% TODO S: Which access methods did we chose and why did we chose them?
+
+\paragraph{Combination of knowledge bases}
+\label{sec:dataset_combination}
+% how are they combined
+% TODO M: SILK
+% COMMENT FROM EMAIL the proposal looks very nice! 
 
 
+%In case you want to tackle the interlinking via SILK, it would be an asset in itself to publish a linkset between ProductDB and DBpedia. 
 
-
-\section{Datasets description}
-\label{sec:datadesc}
-
- dicussion requires a precise definition.
-\begin{definition}
-\label{def:good}
-An entity is good if it is not an evil entity.
-\end{definition}
-In a similar way an evil entity can be defined in the following way.
-
-
-
-\section{Dataset Access Methods}
-\label{sec:dataaccess}
-
-
-\section{Dataset Combination}
-\label{sec:datacomb}
-
-
-\begin{figure}
-	\begin{center}
-	\includegraphics[width=5cm]{good.png}
-	\caption[Angel]{Child Angel and a white dove.}
-	\label{fig:angel}
-	\end{center}
-\end{figure}
-
-
+%Along the same lines, since interlinking can be very well evaluated using recall, precision, and F-measure, I'd like to ask you to produce a small gold standard (say: 100 instances plus their interlinks), and then evaluate how well your interlinking works.
 
 \chapter{Techniques Used}
 \label{cha:technique}
 
-
-
-\section{Reasoning}
-\label{sec:reasoning}
-
-
-\section{Search}
-\label{sec:search}
-
-\section{External Services}
-\label{sec:service}
-
-\textit{Remark: A more elaborated software could use e.g. OpenStreetMap to inquiry the exact address based on the DBPedia results.}
-
+%TODO: add paragraphs for the techniques we are using
+\paragraph{TODO}
+\label{sec:TODO}
 
 
 \chapter{Example results}
 \label{cha:example}
 
-
-\paragraph{Example} 
-an inquery for “soft-drinks” will have a result set containing:
-\begin{verbatim}
-dbo:locationCity : 
-(dbr:Atlanta, 
-dbr:Georgia_(U.S._state), 
-dbr:Coca-Cola_headquarters)
-\end{verbatim}
-
-
-\section{Outcome}
+\paragraph{Outcome}
 \label{sec:outcome}
+% What outcomes does the application provide?
+% TODO: what is meant by "outcome"?
 
-
-
-\section{User Queries}
+\paragraph{Queries}
 \label{sec:query}
 
 
+% TODO: Aspirin (drug from Bayer) among them Ecotrin (-> finds 2 manufacturers for Ecotrin + generics)
+% TODO: Lamotrigine (active substance)
 
-\begin{table}[h]
-
-\begin{center}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}>{\scriptsize}l|>{\scriptsize}c>{\scriptsize}c>{\scriptsize}c|>{\scriptsize}c>{\scriptsize}c>{\scriptsize}c>{\scriptsize}c} 
-& \multicolumn{3}{>{\scriptsize}c|}{Baselines} & \multicolumn{4}{>{\scriptsize}c}{Decision Tree} \\\hline
-Ontology & M(edian) & G(ood) & E(vil) & results & $\Delta$-M & $\Delta$-G & $\Delta$-E \\\hline\hline
-\#301 & 0.825 & 0.877 & 0.877 & 0.855 & +0.030 & -0.022 & -0.022 \\\hline
-\#302 & 0.709 & 0.753 & 0.753 & 0.753 & +0.044 & +0.000 & +0.000 \\\hline
-\#303 & 0.804 & 0.860 & 0.891 & 0.816 & +0.012 & -0.044 & -0.075 \\\hline
-\#304 & 0.940 & 0.961 & 0.961 & 0.967 & +0.027 & +0.006 & +0.006 \\\hline
-\bfseries Average & \bfseries 0.820 & \bfseries 0.863 & \bfseries 0.871 & \bfseries 0.848 & \bfseries +0.028 & \bfseries -0.015 & \bfseries -0.023 
-
-\end{tabular*}
-\caption[Good vs. Evil]{Comparison between the Good and the Evil}
-\label{tab:confonly}
-\end{center}
-\end{table}
+\label{ex:ecotrin}
 
 
-
-\chapter{known limitations}
-\label{cha:limits}
-
+\chapter{Known limitations}
+\label{cha:limiations}
 
 
+\paragraph{Mu}
+%TODO: Check if NeoCitran is part of resultset
 
 
-\section{limited domains}
-\label{sec:lidomain}
+\paragraph{Current manufacturer}
+% TODO: formulate
+FreeBase does not consider time dimension. Therefore multiple drug manufacturers can be found for the same brand if the brand was e.g. sold. An example is Ecotrin (-> page \pageref{ex:ecotrin}) which was developed and produced by GlaxoSmithKline. In 2011 it was sold in bundle deal to Prestige Brands, which is its current manufacturer.
+% TODO: formulate
+Workaround: crawl information from trademark registers. Add information about production time frames to output, since drugs produced from previous brand owners could still be queried.
+
+\paragraph{Quantity of active substance}
+% TODO: formulate
+DBPedia does refer all generics to a single entity, it does not contain information about the quantity of active substances. Therefore a 500mg Aspirin is considered the same as a 200mg Aspirin.
+% TODO: formulate
+Workout: filter quantity from user input and check it on corresponding FreeDB pages.
 
 
 
-\section{queries can't be answered}
+\paragraph{Impossible queries}
 \label{sec:unquery}
+\subparagraph{Multi ingredient drugs}No multi ingredient drugs e.g. "Neo Citran". Because DBPedia does not consider it as a SameAs relationship -> no generics found.
 
-\section{Reason}
-\label{sec:reason}
-
-
-\section{Possible Solutions}
-\label{sec:solution}
+\subparagraph{Drugs not listen as sameAs}
+% TODO: formulate
+If a drug is not linked correctly on DBPedia, e.g. it has an own page, even if the ingredients are identical, the search wont function.
 
 
-
-\chapter{Lessons learned}
+\paragraph{Lessons learned}
 \label{cha:lessons}
+%TODO: at the end
 
-\section{Challenges}
-\label{sec:challenge}
 
-\section{Biggest Obstacles}
+% TODO: delete?
+\paragraph{Use datasets with multiple maintainers} since our initial project proposal, searching manufacturers of certain product categories and visualizing them on Google maps, had to be discarded, since ProductDB was shut down and the only maintainer was unreachable.
+
+
+\paragraph{Challenges}
+\label{sec:challenges}
+
+1. SameAs 
+2. Time
+
+\paragraph{Biggest Obstacles}
 \label{sec:obstacle}
 
-\section{More ideas}
+%\section{More ideas} % TODO S: where does this section come from?
 \label{sec:idea}
 
-\bibliographystyle{plain}
-\bibliography{thesis-ref}
+%\bibliographystyle{plain} %TODO: we might not need it.
+%\bibliography{thesis-ref} %TODO: we might not need it.
 
 
 \appendix
@@ -285,16 +253,13 @@ Ontology & M(edian) & G(ood) & E(vil) & results & $\Delta$-M & $\Delta$-G & $\De
 \chapter{Program Code / Resources}
 \label{cha:appendix-a}
 
-The source code, a documentation, some usage examples, and additional test results are available at ...
-
-They as well as a PDF version of this thesis is also contained on the CD-ROM attached to this thesis.
-
-\chapter{Further Experimental Results}
-\label{cha:appendix-b}
-
-In the following further experimental results are ...
+The source code can be obtained via git. Access to the private repository will be granted upon request by silviadali101@gmail.com
 
 
+%\chapter{Further Experimental Results}
+%\label{cha:appendix-b}
+
+%TODO: section needed?
 \newpage
 
 \end{document}
