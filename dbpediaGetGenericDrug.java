@@ -21,25 +21,23 @@ public class dbpediaGetGenericDrug{
 		//String dbPedia = "http://www.dbpedia.org/";		
 		
 		String ontology_service = "http://factforge.net/sparql";
-
+		String inputDrug ="Aspirin";
 		String endpointSparql = 
-				"PREFIX fb: <http://rdf.freebase.com/ns/> \n"
-				+" PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n"
-				+" PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
-				+"	PREFIX dbpedia: <http://dbpedia.org/resource/> \n"
-				+"		PREFIX dbo: <http://dbpedia.org/ontology/> \n"
-				+"		PREFIX dbp: <http://dbpedia.org/property/> \n"
-				+"		PREFIX dbr: <http://dbpedia.org/resource/>  \n"
+		"		PREFIX dbpedia: <http://dbpedia.org/resource/> \n"
+		+"		PREFIX dbo: <http://dbpedia.org/ontology/>	\n"
+		+"		PREFIX dbp: <http://dbpedia.org/property/> \n"
+		+"		PREFIX dbr: <http://dbpedia.org/resource/> \n"
+		+"		PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+		+"		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
 
-				+"		SELECT DISTINCT * \n"
-				+"		WHERE { \n"
-				+"		   ?drugBrandName dbo:wikiPageRedirects ?genericDrug . \n"
-				+"		   ?genericDrug rdfs:label ?label ; \n"
-				+"		                rdf:type dbo:Drug . \n"
-				+"		   FILTER(lang(?label)=\"en\" ) \n"
+		+"			SELECT DISTINCT ?alternativeGenerics ?genericDrugName\n"
+		+"			WHERE {\n"
+		+"			   ?drugBrandName dbo:wikiPageRedirects ?genericDrug .\n"
+		+"			   ?alternativeGenerics rdfs:label ?genericDrugName ;\n"
+		+"			                rdf:type dbo:Drug .\n"
+		+"			   FILTER(lang(?genericDrugName)=\"en\" && regex(?genericDrugName,\".*"+inputDrug+"\"))\n"
 					    
-				+"		} limit 1000 \n" ;
-			
+		+"			} limit 1000\n";
 
 		System.out.println(endpointSparql);
 		Query query = QueryFactory.create(endpointSparql);

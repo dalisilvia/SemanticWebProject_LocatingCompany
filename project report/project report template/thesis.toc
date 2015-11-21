@@ -1,27 +1,26 @@
 \contentsline {chapter}{\numberline {1}Application domain and goals}{1}
-\contentsline {section}{\numberline {1.1}Targeted Users}{1}
-\contentsline {section}{\numberline {1.2}Problems Description}{2}
-\contentsline {section}{\numberline {1.3}Demand Analysis}{2}
-\contentsline {chapter}{\numberline {2}Datasets used}{3}
-\contentsline {section}{\numberline {2.1}Datasets description}{3}
-\contentsline {section}{\numberline {2.2}Dataset Access Methods}{3}
-\contentsline {section}{\numberline {2.3}Dataset Combination}{3}
-\contentsline {chapter}{\numberline {3}Techniques Used}{5}
-\contentsline {section}{\numberline {3.1}Reasoning}{5}
-\contentsline {section}{\numberline {3.2}Search}{5}
-\contentsline {section}{\numberline {3.3}External Services}{5}
-\contentsline {chapter}{\numberline {4}Example results}{6}
-\contentsline {paragraph}{Example}{6}
-\contentsline {section}{\numberline {4.1}Outcome}{6}
-\contentsline {section}{\numberline {4.2}User Queries}{6}
-\contentsline {chapter}{\numberline {5}known limitations}{7}
-\contentsline {section}{\numberline {5.1}limited domains}{7}
-\contentsline {section}{\numberline {5.2}queries can't be answered}{7}
-\contentsline {section}{\numberline {5.3}Reason}{7}
-\contentsline {section}{\numberline {5.4}Possible Solutions}{7}
-\contentsline {chapter}{\numberline {6}Lessons learned}{8}
-\contentsline {section}{\numberline {6.1}Challenges}{8}
-\contentsline {section}{\numberline {6.2}Biggest Obstacles}{8}
-\contentsline {section}{\numberline {6.3}More ideas}{8}
-\contentsline {chapter}{\numberline {A}Program Code / Resources}{9}
-\contentsline {chapter}{\numberline {B}Further Experimental Results}{10}
+\contentsline {paragraph}{Problem}{1}
+\contentsline {paragraph}{Solution}{1}
+\contentsline {chapter}{\numberline {2}Datasets}{2}
+\contentsline {paragraph}{Datasets used}{2}
+\contentsline {subparagraph}{DBPedia}{2}
+\contentsline {subparagraph}{FreeBase}{2}
+\contentsline {paragraph}{Access methods}{2}
+\contentsline {paragraph}{Combination of knowledge bases}{2}
+\contentsline {chapter}{\numberline {3}Techniques Used}{3}
+\contentsline {paragraph}{TODO}{3}
+\contentsline {chapter}{\numberline {4}Example results}{4}
+\contentsline {paragraph}{Outcome}{4}
+\contentsline {paragraph}{Queries}{4}
+\contentsline {chapter}{\numberline {5}Known limitations}{5}
+\contentsline {paragraph}{Mu}{5}
+\contentsline {paragraph}{Current manufacturer}{5}
+\contentsline {paragraph}{Quantity of active substance}{5}
+\contentsline {paragraph}{Impossible queries}{5}
+\contentsline {subparagraph}{Multi ingredient drugs}{5}
+\contentsline {subparagraph}{Drugs not listen as sameAs}{5}
+\contentsline {paragraph}{Lessons learned}{5}
+\contentsline {paragraph}{Use datasets with multiple maintainers}{6}
+\contentsline {paragraph}{Challenges}{6}
+\contentsline {paragraph}{Biggest Obstacles}{6}
+\contentsline {chapter}{\numberline {A}Program Code / Resources}{7}

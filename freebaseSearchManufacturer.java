@@ -6,8 +6,20 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
+
+//another query
+//+"	SELECT DISTINCT ?drugManufactureNname ?BrandName 		"
+//+"	WHERE {				"	
+//+"	      ?drugMa fb:medicine.drug_manufacturer.drugs_manufactured  ?drugBrandId .  "
+//+"	      ?drugMa fb:type.object.name ?drugManufactureNname .  "
+//+"	       ?drugMa  a dbo:Company .  "
+//+"	     ?drugBrandId fb:type.object.name ?BrandName .  "
+//+"	     ?drugBrandId fb:medicine.manufactured_drug_form.manufactured_form_of ?drugFormulationId .  "
+//+"	      ?drugFormulationId fb:type.object.name ?FormulationName .  "
+//+"	     ?drugFormulationId fb:medicine.drug_formulation.formulation_of dbpedia:Aspirin .  "
+//+"	  		 FILTER(lang(?drugManufactureNname)=\"en\")  "    
+//+"	} ORDER BY ?BrandName " ;
+
 
 public class freebaseSearchManufacturer{
 
@@ -22,40 +34,29 @@ public class freebaseSearchManufacturer{
 		//String dbPedia = "http://www.dbpedia.org/";		
 		
 		String ontology_service = "http://factforge.net/sparql";
-		String genericDrug = "Aspirin";
+		String generics = "Ecotrin";
 
 		String endpointSparql = 
-		" PREFIX fb: <http://rdf.freebase.com/ns/> "
-		+"	PREFIX dbpedia: <http://dbpedia.org/resource/> "
-		+"	PREFIX dbo: <http://dbpedia.org/ontology/> "
-//		+"	SELECT DISTINCT ?drugManufactureNname ?BrandName 		"
-//		+"	WHERE {				"	
-//		+"	      ?drugMa fb:medicine.drug_manufacturer.drugs_manufactured  ?drugBrandId .  "
-//		+"	      ?drugMa fb:type.object.name ?drugManufactureNname .  "
-//		+"	       ?drugMa  a dbo:Company .  "
-//		+"	     ?drugBrandId fb:type.object.name ?BrandName .  "
-//		+"	     ?drugBrandId fb:medicine.manufactured_drug_form.manufactured_form_of ?drugFormulationId .  "
-//		+"	      ?drugFormulationId fb:type.object.name ?FormulationName .  "
-//		+"	     ?drugFormulationId fb:medicine.drug_formulation.formulation_of dbpedia:Aspirin .  "
-//		+"	  		 FILTER(lang(?drugManufactureNname)=\"en\")  "    
-//		+"	} ORDER BY ?BrandName " ;
-			+"		PREFIX dbo: <http://dbpedia.org/ontology/>"
-			+"		SELECT DISTINCT  ?drugManufactuerName ?drugBrandName "
-			+"		WHERE { "
-			+"		       ?drugBrandId fb:medicine.manufactured_drug_form.manufacturer ?drugManufactuerId  ;"
-			+"		                     fb:type.object.name ?drugBrandName ;"
-			+"		                      fb:common.topic.notable_types fb:medicine.manufactured_drug_form ;"
-			+"		                    fb:medicine.manufactured_drug_form.manufactured_form_of ?drugId ."
-			+"		    ?drugManufactuerId fb:type.object.name ?drugManufactuerName ."
-			+"		              ?drugId    fb:medicine.drug_formulation.drug_category  dbpedia:Drug ;"
-			+"		                          fb:type.object.name ?drugName .  "
-			+"		  FILTER (regex(?drugName , \".*"+genericDrug+"\") && lang(?drugManufactuerName)=\"en\" ) "
-			+"		} ORDER BY ?drugBrandName";
-
-		System.out.println(endpointSparql);
-		Query query = QueryFactory.create(endpointSparql);
+		" PREFIX fb: <http://rdf.freebase.com/ns/> \n "
+		+"	PREFIX dbpedia: <http://dbpedia.org/resource/> \n "
+		+"	PREFIX dbo: <http://dbpedia.org/ontology/> \n "
+		+"	SELECT DISTINCT   ?genericManufactureName \n "
+		+"	WHERE {\n "
+		+"	   ?genericManufactureId fb:medicine.drug_manufacturer.drugs_manufactured  \n "
+		+"	                                                        ?alternativeGenericsId .\n "
+		+"	  ?genericManufactureId fb:type.object.name ?genericManufactureName .\n "
+		+"	  {?alternativeGenericsId a fb:medicine.drug_brand  .}\n "
+		+"	  UNION{\n "
+		+"	  ?alternativeGenericsId fb:type.object.name ?alternativeGenericsBrandName.}\n "
+		+"	   UNION{\n "
+		+"	      ?alternativeGenericsId   a fb:medicine.drug .}\n "
+		+"	   FILTER (regex(?alternativeGenericsBrandName, \".*"+generics+".*\") && lang(?genericManufactureName)=\"en\")\n "
+		+"	  } LIMIT 20 "
 		
-		Model dbModel = ModelFactory.createDefaultModel();
+		;
+
+		System.out.println("the manufacturer of "+generics+":\n");
+		Query query = QueryFactory.create(endpointSparql);
 		
 		QueryExecution queryExe =
 				QueryExecutionFactory.sparqlService(ontology_service, query);    //endpoint search query
