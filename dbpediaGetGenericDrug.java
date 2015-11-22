@@ -3,12 +3,14 @@ package knowledgeBases;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 
@@ -60,9 +62,11 @@ public class dbpediaGetGenericDrug{
 		
 		ResultSet results = queryExe.execSelect();
 	//	ResultSetFormatter.out(System.out, results);
-		String stringResult= ResultSetFormatter.asText(results, query);
-		
-		System.out.println(stringResult);
+	//	String stringResult= ResultSetFormatter.asText(results, query);
+		List<QuerySolution> listResult = ResultSetFormatter.toList(results);
+		//System.out.println(stringResult);
+		System.out.println(listResult);
+		System.out.println(listResult.get(3));
 		
 		
 	}
