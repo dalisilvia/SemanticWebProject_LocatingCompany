@@ -64,12 +64,7 @@ public class dbpediaGetGenericDrug{
 				QueryExecutionFactory.sparqlService(ontology_service, query);    //endpoint search query
 		
 		ResultSet results = queryExe.execSelect();
-		
-	//	ResultSetFormatter.out(System.out, results);
-	//	String stringResult= ResultSetFormatter.asText(results, query);
-		
-		//System.out.println(stringResult);
-		List<QuerySolution> listResult = ResultSetFormatter.toList(results);
+		List<QuerySolution> listResult = ResultSetFormatter.toList(results);    //format result as list
 		int listResultSize = listResult.size();
 		String[] PreResults = new String[listResultSize] ;
 		String[] extractedResults = new String[listResultSize];
