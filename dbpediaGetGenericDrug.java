@@ -1,5 +1,10 @@
 package knowledgeBases;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Map;
+
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -17,11 +22,18 @@ public class dbpediaGetGenericDrug{
 //		}
 //	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		//String dbPedia = "http://www.dbpedia.org/";		
 		
+	      BufferedReader br = new BufferedReader(new
+	                              InputStreamReader(System.in));
+	      String userInput;
+	      System.out.println("Enter drug name:");
+	          userInput = (String) br.readLine();
+	          System.out.println("You entered : " + userInput);
+	     	
 		String ontology_service = "http://dbpedia.org/sparql";
-		String inputDrug ="Aspirin";
+		System.out.println(userInput);
 		String endpointSparql = 
 		"		PREFIX dbpedia: <http://dbpedia.org/resource/> \n"
 		+"		PREFIX dbo: <http://dbpedia.org/ontology/>	\n"
@@ -35,11 +47,11 @@ public class dbpediaGetGenericDrug{
 		+"			   ?drugName dbo:wikiPageRedirects ?genericDrug .\n"
 		+"			   ?genericDrug rdfs:label ?label ;\n"
 		+"			        rdf:type dbo:Drug . \n"
-		+"			    FILTER(lang(?label)=\"en\"&& regex(?genericDrug,\".*"+inputDrug+".*\"))\n"
+		+"			    FILTER(lang(?label)=\"en\"&& regex(?genericDrug,\".*"+userInput+"\"))\n"
 		
 					    
 		+"			} limit 1000\n";
-
+	//	System.out.println(endpointSparql);
 		System.out.println("the alternatives drugs are:");
 		Query query = QueryFactory.create(endpointSparql);
 		
@@ -47,14 +59,10 @@ public class dbpediaGetGenericDrug{
 				QueryExecutionFactory.sparqlService(ontology_service, query);    //endpoint search query
 		
 		ResultSet results = queryExe.execSelect();
+	//	ResultSetFormatter.out(System.out, results);
+		String stringResult= ResultSetFormatter.asText(results, query);
 		
-	/*	while(results.hasNext()) {
-			QuerySolution sol = results.next();
-			String s = sol.get("x").toString();
-			System.out.println(s);
-		}
-		*/
-		ResultSetFormatter.out(System.out, results);
+		System.out.println(stringResult);
 		
 		
 	}
