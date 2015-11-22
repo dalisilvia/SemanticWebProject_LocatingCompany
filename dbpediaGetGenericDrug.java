@@ -20,7 +20,7 @@ public class dbpediaGetGenericDrug{
 	public static void main(String[] args) {
 		//String dbPedia = "http://www.dbpedia.org/";		
 		
-		String ontology_service = "http://factforge.net/sparql";
+		String ontology_service = "http://dbpedia.org/sparql";
 		String inputDrug ="Aspirin";
 		String endpointSparql = 
 		"		PREFIX dbpedia: <http://dbpedia.org/resource/> \n"
@@ -30,16 +30,17 @@ public class dbpediaGetGenericDrug{
 		+"		PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
 		+"		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
 
-		+"			SELECT DISTINCT ?alternativeGenerics ?genericDrugName\n"
+		+"			SELECT DISTINCT ?drugName\n"
 		+"			WHERE {\n"
-		+"			   ?drugBrandName dbo:wikiPageRedirects ?genericDrug .\n"
-		+"			   ?alternativeGenerics rdfs:label ?genericDrugName ;\n"
-		+"			                rdf:type dbo:Drug .\n"
-		+"			   FILTER(lang(?genericDrugName)=\"en\" && regex(?genericDrugName,\".*"+inputDrug+"\"))\n"
+		+"			   ?drugName dbo:wikiPageRedirects ?genericDrug .\n"
+		+"			   ?genericDrug rdfs:label ?label ;\n"
+		+"			        rdf:type dbo:Drug . \n"
+		+"			    FILTER(lang(?label)=\"en\"&& regex(?genericDrug,\".*"+inputDrug+".*\"))\n"
+		
 					    
 		+"			} limit 1000\n";
 
-		System.out.println(endpointSparql);
+		System.out.println("the alternatives drugs are:");
 		Query query = QueryFactory.create(endpointSparql);
 		
 		QueryExecution queryExe =
