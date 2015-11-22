@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
@@ -24,6 +26,7 @@ public class dbpediaGetGenericDrug{
 //		}
 //	}
 
+	@SuppressWarnings("null")
 	public static void main(String[] args) throws IOException {
 		//String dbPedia = "http://www.dbpedia.org/";		
 		
@@ -44,12 +47,12 @@ public class dbpediaGetGenericDrug{
 		+"		PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
 		+"		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
 
-		+"			SELECT DISTINCT ?drugName\n"
+		+"			SELECT DISTINCT ?drugName \n"
 		+"			WHERE {\n"
 		+"			   ?drugName dbo:wikiPageRedirects ?genericDrug .\n"
 		+"			   ?genericDrug rdfs:label ?label ;\n"
 		+"			        rdf:type dbo:Drug . \n"
-		+"			    FILTER(lang(?label)=\"en\"&& regex(?genericDrug,\".*"+userInput+"\"))\n"
+		+"			    FILTER(lang(?label)=\"en\"&& regex(?genericDrug,\".*"+userInput+"$\"))\n"
 		
 					    
 		+"			} limit 1000\n";
@@ -61,13 +64,34 @@ public class dbpediaGetGenericDrug{
 				QueryExecutionFactory.sparqlService(ontology_service, query);    //endpoint search query
 		
 		ResultSet results = queryExe.execSelect();
+		
 	//	ResultSetFormatter.out(System.out, results);
 	//	String stringResult= ResultSetFormatter.asText(results, query);
-		List<QuerySolution> listResult = ResultSetFormatter.toList(results);
-		//System.out.println(stringResult);
-		System.out.println(listResult);
-		System.out.println(listResult.get(3));
 		
+		//System.out.println(stringResult);
+		List<QuerySolution> listResult = ResultSetFormatter.toList(results);
+		int listResultSize = listResult.size();
+		String[] PreResults = new String[listResultSize] ;
+		String[] extractedResults = new String[listResultSize];
+		for(int i=0;i<listResultSize;i++)
+		{
+			// extractedResults[i] =listResult.get(i).toString();
+			 
+			 Pattern pattern = Pattern.compile(".*/");
+			 Matcher matcher = pattern.matcher(listResult.get(i).toString());
+			
+			 if (matcher.find())
+			 {
+				 PreResults[i]= matcher.group(0);
+			     
+			 }
+			 int startIndex = PreResults[i].length();
+			 int endIndex = listResult.get(i).toString().length();
+			 extractedResults[i]=(String) listResult.get(i).toString().subSequence(startIndex, endIndex-3);	 
+			 System.out.println(extractedResults[i]);
+		}
+	//  System.out.println(extractedResults); 
+	//	System.out.println(listResult);	
 		
 	}
 }
