@@ -106,7 +106,7 @@
 \pagenumbering{arabic}
 
 % Legend:
-% TODO: 		general todo, doesnt matter who takes care of it
+% TODO: 	general todo, doesnt matter who takes care of it
 % TODO M: 	todo for Markus
 % TODO S: 	todo for Silvia
 
@@ -141,20 +141,22 @@ The search engine is designed for private individuals, without any medical exper
 \paragraph{Datasets used}
 \label{sec:datasets_used}
 % which datasets does the application use
+The application uses drug datasets extracted from DBPedia and FreeBase with correspondent SPARQL query.
 
 \subparagraph{DBPedia}
 \label{dbpedia}
 % TODO S: describe DBPedia (important: dont copy and paste + cite correctly!)
-
+fetches all alternative generics of the targeted drug by a certain propery \textit{ dbo:wikiPageRedirects\footnote{\url{http://dbpedia.org/ontology/wikiPageRedirects}}} and then saves the results name as an input for FreeBase dataset.
 \subparagraph{FreeBase}
 \label{freebase}
 % TODO S: describe FreeBase (important: dont copy and paste + cite correctly!)
+searches drug manufacturers for every alternative generics and integrate the result to users.
 
 \paragraph{Access methods}
 \label{sec:access_methods}
 % how are they accessed
 % TODO S: Which access methods did we chose and why did we chose them?
-
+Both DBPedia and FreeBase data are accessed via SPARQL endpoints. For DBPedia, the \textit{offical DBPedia endpoint\footnote{\url{http://dbpedia.org/sparql}}} is used to ensure the quality of query result. Unfortunately, the official FreeBase endpoint is offline for the moment that we choose \textit{factforge\footnote{\url{http://factforge.net/}}} endpoint instead.
 \paragraph{Combination of knowledge bases}
 \label{sec:dataset_combination}
 % how are they combined
@@ -168,8 +170,12 @@ The search engine is designed for private individuals, without any medical exper
 
 \chapter{Techniques Used}
 \label{cha:technique}
-
 %TODO: add paragraphs for the techniques we are using
+Three semantic web techniques are related to drug application: SPARQL, Jena and SILK respectively.
+SPARQL gives a solution to acquire certain information from linked datasets.
+Jena framework provides interfaces that processes RDF graphs, models and results efficiently, such as extracting data from DBPedia and FreeBase in this case. 
+
+
 \paragraph{TODO}
 \label{sec:TODO}
 
