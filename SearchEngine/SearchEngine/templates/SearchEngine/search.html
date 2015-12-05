@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Generics Search Engine{% endblock title %}
+
+{% block navbar %}
+   {% include "SearchEngine/searchbar.html" %}
+{% endblock navbar %}
+
+{% block content %}
+{% load bootstrap3 %}
+
+<h3 class="page_header">{% trans "We found the following generics of" %} {{search_term}}</h3>
+
+
+<table class="table table-condensed table-responsive table-hover">
+	<tr>
+		<th></th>
+	 	<th>{% bootstrap_icon "barcode" %} {% trans "Product name" %}</th>
+	 	<th>{% bootstrap_icon "cog" %} {% trans "Manufacturer" %}</th>
+	</tr>
+	
+
+{% for each in results %}
+
+	<tr {% if each.is_product %}style="font-size: small;"{% endif %}>
+		<th {% if each.is_product %}style="font-size: small; padding-left: 15px"{% endif %}>{{ forloop.counter }}</th>
+		{% if each.website %}
+	 		<td><a href="{{each.website}}" target="_blank">{{each.name}}{% bootstrap_icon "link" %}</a></td>
+		{% else %}
+	 		<td>{{each.name}} </td>
+		{% endif %}
+
+		{% if each.manufacturer %}
+			{% if each.manu_website %}
+		 		<td><a href="{{each.manu_website}}" target="_blank">{{each.manufacturer}}{% bootstrap_icon "link" %}</a></td>
+			{% else %}
+		 		<td>{{each.manufacturer}}</td>
+			{% endif %}
+		{% else %}
+		 		<td></td>
+		{% endif %}
+	 	
+	</tr>
+{% endfor %}
+
+ </table>
+
+{% endblock content%}

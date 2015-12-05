@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block title %}Generics Search Engine{% endblock title %}
+
+{% block content %}
+
+
+<div class="index_search">
+<h1 style="text-align: center;">{% trans "Generics search" %}</h3>
+   	<form role="search" action="{% url 'search' %}" method="get">
+		{% csrf_token %}
+		<div class="input-group ">
+		    <input type="text" class="form-control" placeholder="Aspirin" name="search_term">
+
+		    <span class="input-group-btn" >
+		        <button class="btn btn-info" type="submit">&nbsp;{% bootstrap_icon "search" %}&nbsp;</button>
+		    </span>
+		</div>
+	</form>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% bootstrap_javascript jquery=1 %}
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+
+   	<form class="navbar-form navbar-left" role="search" action="{% url 'search' %}" method="get">
+		{% csrf_token %}
+		<div class="input-group" style="display:table;">
+		    <input type="text" class="form-control" placeholder="Aspirin" name="search_term" value="{{search_term}}">
+
+		    <span class="input-group-btn" style="width: 1%;">
+		        <button class="btn btn-info" type="submit">&nbsp;{% bootstrap_icon "search" %}&nbsp;</button>
+		    </span>
+	</div>
+
+ 
+
+
+
+    </form>
+
+
+      
+
+  </div><!-- /.container-fluid -->
+</nav>

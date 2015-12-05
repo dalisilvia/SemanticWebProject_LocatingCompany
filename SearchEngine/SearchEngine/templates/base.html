@@ -1,0 +1,44 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'SearchEngine/css/main.css' %}" />
+        <title>{% block title %}{% endblock title %}</title>
+
+        {% block head %}
+
+        {% endblock %}
+
+        {# Load CSS and JavaScript #}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+    </head>
+
+
+
+
+    <body>    
+        {% block navbar %}{% endblock navbar %}
+
+        {# Display django.contrib.messages as Bootstrap alerts #}
+        {% bootstrap_messages %}
+
+        <!-- content-->
+        <div class="container">
+             {% block content %}{% endblock content %}
+        </div> <!-- close content container -->
+
+       <!-- Footer -->
+
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">&copy; 2015 - Markus Dietsche</p>
+      </div>
+    </footer>
+
+
+
+    </body>
+</html>
