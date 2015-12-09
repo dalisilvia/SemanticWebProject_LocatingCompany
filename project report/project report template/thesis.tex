@@ -122,17 +122,12 @@ Furthermore drugs often have fantasy names, due to marketing reasons. This is in
 In case of drugs without patent protection this potentially results in filtering thousands of different drugs by their ingredients. Needless to say that even well informed an unbiased expert will not know all generics by heart.
 
 
-
 \paragraph{Solution} 
 %\paragraph{Target group}\label{sec:users}
 % Which users are targeted?
 The search engine is designed for private individuals, without any medical expert knowledge.
 \label{sec:solution} % Which user problems are solved?
- By entering a drug brand name or active substance the prototype will return a list of identical substitute drugs and their corresponding drug manufacturers.
-
-
-% \section{Demand Analysis} %TODO S: what is this section?
-
+ By entering a drug brand name, ATC code\footnote{Anatomical Therapeutic Chemical (ATC) Classification System} or active substance the prototype will return a list of identical substitute drugs and their corresponding drug manufacturers.
 
 
 \chapter{Datasets}
@@ -152,35 +147,81 @@ fetches all alternative generics of the targeted drug by a certain propery \text
 % TODO S: describe FreeBase (important: dont copy and paste + cite correctly!)
 searches drug manufacturers for every alternative generics and integrate the result to users.
 
+Differences vs DB Pedai
+\footnote{\url{http://wiki.freebase.com/wiki/DBPedia}}
+
+(page \pageref{prob:freebase})
+
+
+
+
+
 \paragraph{Access methods}
 \label{sec:access_methods}
 % how are they accessed
 % TODO S: Which access methods did we chose and why did we chose them?
-Both DBPedia and FreeBase data are accessed via SPARQL endpoints. For DBPedia, the \textit{offical DBPedia endpoint\footnote{\url{http://dbpedia.org/sparql}}} is used to ensure the quality of query result. Unfortunately, the official FreeBase endpoint is offline for the moment that we choose \textit{factforge\footnote{\url{http://factforge.net/}}} endpoint instead.
+
+
+
 \paragraph{Combination of knowledge bases}
 \label{sec:dataset_combination}
 % how are they combined
-% TODO M: SILK
-% COMMENT FROM EMAIL the proposal looks very nice! 
 
+I. DBPedia
+(a) withdraw list of \textit{dbo:wikiPageRedirect}
+(b) if search term is a redirect -> follow redirect and (a)
 
-%In case you want to tackle the interlinking via SILK, it would be an asset in itself to publish a linkset between ProductDB and DBpedia. 
+II. Filter 
+DBPedia has redirects for different brands of the same drug, ATC codes and chemical formulas. Fortunately ATC code label contain \_code\_ and (most) formulas end with \_acid. Therefore an entity with these labels does not need to be considered in III.
 
-%Along the same lines, since interlinking can be very well evaluated using recall, precision, and F-measure, I'd like to ask you to produce a small gold standard (say: 100 instances plus their interlinks), and then evaluate how well your interlinking works.
+III. FreeBase
+(a) Check if search term is a \textit{drug\_brand} receive \textit{manufacturer}, a list of \textit{products} and the \textit{website} of the manufacturer.
+(b) For each of the products, receive \textit{manufacturer} and \textit{website}. 
+Remark: it is possible that different products of the same brand are produced from different manufacturer.
+(c) In case FreeBase has no separate entity for a search term, it might still has it as a alias for a \text{drug}.
+
 
 \chapter{Techniques Used}
 \label{cha:technique}
 %TODO: add paragraphs for the techniques we are using
-Three semantic web techniques are related to drug application: SPARQL, Jena and SILK respectively.
-SPARQL gives a solution to acquire certain information from linked datasets.
-Jena framework provides interfaces that processes RDF graphs, models and results efficiently, such as extracting data from DBPedia and FreeBase in this case. 
 
 
-\paragraph{TODO}
+
+The techniques applied in our project will be discussed in this section. The viable prototype, which was also used for the field trial (-> page \pageref{sec:field_trial}), is available at \url{http://generics.markus-dietsche.de}.
+
+\paragraph{Prototype}
+\label{sec:prototype}
+
+
+To ensure a user-friendly field trial, a web application was developed. It's based on 
+Django\footnote{\url{https://www.djangoproject.com/}}, a framework for web applications written in Python and Bootstrap\footnote{\url{https://getbootstrap.com/}} a web frontend framework.
+
+SPARQL, a query language to access Resource Description Framework (RDF) data, is used to access DBPedia via it's SPARQL endpoint. On client side SPARQLWrapper\footnote{\url{https://rdflib.github.io/sparqlwrapper/}} is used to facilitate the query creation and result converting. 
+
+
+Metaweb Query Language MQL\footnote{\url{https://developers.google.com/freebase/v1/mql-overview}}, is the endorsed way to access information from FreeBase. MQL was chosen since the official SPARQL endpoint\footnote{\url{http://www.freebase.com/base/sparql}} of FreeBase is offline, the FactForge endpoint\footnote{\url{http://factforge.net/sparql}} is unreliable and slow and a local installation would consume with 250GB\footnote{\url{https://developers.google.com/freebase/data}} too much space for testing purposes.
+
+Freebase stores information in n-tuples, unlike DBpedia which stores data in RDF triplets. Therefore MQL queries against FreeBase are easier to write than SPARQL queries.
+
+
+Since the discontinuance of freebase (page \pageref{prob:freebase}) registration is impossible. Unfortunately the official freebase python wrapper \footnote{\url{https://code.google.com/p/freebase-python/}} requires a user account and can therefore not be used. Due to this a homegrown MQL wrapper, to access the web MQL client, was written.
+
+
+
+  \paragraph{TODO}
 \label{sec:TODO}
 
 
-\chapter{Example results}
+\chapter{Evaluation}
+\label{cha:evaluation}
+
+\paragraph{Example results}
+\label{cha:example}
+
+\paragraph{Field Trial}
+\label{cha:example}
+
+\paragraph{Quality of dataset combination}
 \label{cha:example}
 
 \paragraph{Outcome}
@@ -206,22 +247,25 @@ Jena framework provides interfaces that processes RDF graphs, models and results
 
 %The DBPedia results also contain active substances which may result in wrong %manufacturers from Freebase.
 
-\paragraph{Mu}
-%TODO: Check if NeoCitran is part of resultset
+\label{prob:freebase}
 
+\paragraph{FreeBase}
+Google decided to discontinue FreeBase in June 2015\footnote{\url{https://plus.sandbox.google.com/109936836907132434202/posts/bu3z2wVqcQc}} to support the growth of Wikidata, which does currently not contain the information this project requires. Due to this the project switched into read-only mode and the knowledge will not further expand. The only possibility for the search engine to improve is if DBPedia adds new redirects for which FreeDB already contains information. 
 
+\paragraph{Filtering}
+In some cases DBPedia redirects form syntactically incorrect chemical formulas and APC codes (-> page \pageref{sec:filtering}) \textbf{Workaround} A more elaborated regular expression for filtering.
 
 \paragraph{Current manufacturer}
 % TODO: formulate
-FreeBase does not consider time dimension. Therefore multiple drug manufacturers can be found for the same brand if the brand was e.g. sold. An example is Ecotrin (-> page \pageref{ex:ecotrin}) which was developed and produced by GlaxoSmithKline. In 2011 it was sold in bundle deal to Prestige Brands, which is its current manufacturer.
+FreeBase does not consider the time dimension for ownership. Therefore multiple drug manufacturers can be found for the same brand if the brand was e.g. sold. An example is Ecotrin (-> page \pageref{ex:ecotrin}) which was developed and produced by GlaxoSmithKline. In 2011 it was sold in bundle deal to Prestige Brands, which is its current manufacturer.
 % TODO: formulate
-Workaround: crawl information from trademark registers. Add information about production time frames to output, since drugs produced from previous brand owners could still be queried.
+\textbf{Workaround} crawl information from trademark registers. Add information about production time frames to output, since drugs produced from previous brand owners could still be queried.
 
 \paragraph{Quantity of active substance}
 % TODO: formulate
 DBPedia does refer all generics to a single entity, it does not contain information about the quantity of active substances. Therefore a 500mg Aspirin is considered the same as a 200mg Aspirin.
 % TODO: formulate
-Workout: filter quantity from user input and check it on corresponding FreeDB pages.
+\textbf{Workaround} filter quantity from user input and check it on corresponding FreeDB pages.
 
 
 
@@ -260,13 +304,6 @@ If a drug is not linked correctly on DBPedia, e.g. it has an own page, even if t
 
 
 \appendix
-
-\chapter{Program Code / Resources}
-\label{cha:appendix-a}
-
-The source code can be obtained via git. Access to the private repository will be granted upon request by silviadali101@gmail.com
-
-
 %\chapter{Further Experimental Results}
 %\label{cha:appendix-b}
 
