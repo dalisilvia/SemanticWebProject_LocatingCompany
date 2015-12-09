@@ -307,10 +307,20 @@ In addition 24 random non-experts (group B) from Germany, Romania and Canada par
 A total of 309 queries\footnote{Queries are conducted anonymously, so there is no information about which group conducted them.} was analyzed. 184 queries returned results (59.5\%), 102 were misspelled (33.0\%), which mostly was due to the first letter being lowercase or the brand name in foreign languages , and 23 (7.5\%) did not return any results.  
 
 \paragraph{Quality of knowledge base linkage}
-\label{cha:example}
-
-TODO S
-
+\label{cha:gold standard}
+A gold standard of 100 instances are produced to assess the quality of interlinking between DBPedia and Freebase. Among 100 tests, 2079 alternative brand drugs are obtained with 26\% filtered by combination requirement. 101 manufacturers corresponding to brand drug are extracted while 476 manufactured products got correct manufacturer information to user.  Finally,31 out of 101 manufacturer information are correctly acquired.
+\begin{table}[h]
+\centering
+\label{my-label}
+\begin{tabular}{lllll}
+                          &       & \multicolumn{2}{l}{Search Engine} & Precision \\\hline
+Accuracy:94\%             &       & True            & False           &       \\\hline
+Freebase                  & True  & 31              & 52              & 37.3\%    \\\hline
+                          & False & 70              & 1923            & 96.5\%    \\\hline
+Recall                    &       & 30.1\%          & 97.4\%          &          
+\end{tabular}
+\captionof{table}{gold standard evaluation}
+\end{table}
 \paragraph{Outcome}
 \label{outcome}
 % What outcomes does the application provide?

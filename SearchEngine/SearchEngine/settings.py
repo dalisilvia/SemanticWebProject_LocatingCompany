@@ -183,4 +183,4 @@ BOOTSTRAP3 = {
 }
 
 # Enter Google API Key (make sure it allowes access to FreeBase)
-api_key = ""
+api_key = "AIzaSyCU8jL7KNIajjWVpZNsndIIY4TMbUlCxsI"
