@@ -377,10 +377,12 @@ DBPedia does refer all generics to a single entity, it does not contain informat
 
 \paragraph{Duplicate products}
 \label{limitations:dubplicates} 
-The current MQL query receives the manufacturer due to the label of the manufactured product. Due to this only one manufacturer is shown in the result set for entities with the same label. An exmaple is \textit{Methylin 10 tablet}, from out Ritalin example on  p. \pageref{example:ritalin}, which has two entities in freebase \url{http://www.freebase.com/m/0hqprm_} manufactured by Mallinckrodt and \url{http://www.freebase.com/m/0hqh8ty} manufactured by Golden State Medical Supply. \textbf{Remark} there are dates stored for the start and end of related marketing campaign. Based on this an assumption could be made which one is the current manufacturer, yet this would not be reasonable proof. \textbf{Workaround} a more elaborated query which follows the links of the corresponding entities, instead of withdrawing a manufacturer for the label of the manufactured product.
+The current MQL query receives the manufacturer due to the label of the manufactured product. Due to this only one manufacturer is shown in the result set for entities with the same label. An exmaple is \textit{Methylin 10 tablet}, from out Ritalin example on  p. \pageref{example:ritalin}, which has two entities in freebase one manufactured by Mallinckrodt\footnote{\url{http://www.freebase.com/m/0hqprm_}} and the second manufactured by Golden State Medical Supply\footnote{\url{http://www.freebase.com/m/0hqh8ty}}. \textbf{Remark} there are dates stored for the start and end of related marketing campaign. Based on this an assumption could be made which one is the current manufacturer, yet this would not be reasonable proof. \textbf{Workaround} a more elaborated query which follows the links of the corresponding entities, instead of withdrawing a manufacturer for the label of the manufactured product.
 
 
-\paragraph{Impossible queries}
+\paragraph{Impossible queries} exist for 3 groups of queries:
+
+
 \label{drug_cocktail}
 \subparagraph{Multi ingredient drugs} No multi-ingredient drugs e.g. "Neo Citran" can be found with this approach. This is due to the fact that DBPedia does not consider it as a wikiPageRedirect relationship $\rightarrow$. this is only the case for pure active substances.
 
