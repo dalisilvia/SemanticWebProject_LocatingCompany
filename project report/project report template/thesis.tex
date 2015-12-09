@@ -148,7 +148,7 @@ Both DB and FB are based on information extracted from Wikipedia and the schema 
 \subparagraph{DBPedia}
 \label{dbpedia}
 
-DB considers all drug brands for the same active substance as the same entity. It contains a \textit{dbo:wikiPageRedirects\footnote{\url{http://dbpedia.org/ontology/wikiPageRedirects}}} for each drug brand, active substance or ATC code. The extraction of the brand names is explained on page \pageref{filtering}.
+DB considers all drug brands for the same active substance as the same entity. It contains a \textit{dbo:wikiPageRedirects\footnote{\url{http://dbpedia.org/ontology/wikiPageRedirects}}} for each drug brand, active substance or ATC code. The extraction of the brand names is explained on page \pageref{limitations:filtering}.
 
 
 \subparagraph{FreeBase}
@@ -168,19 +168,16 @@ In consequence of the the endorsed accessing ways SPARQL ($\rightarrow$ p. \page
 \paragraph{Combination of knowledge bases}
 \label{dataset_combination}
 % how are they combined
+The two knowledge bases are combined in a 3 step process: I. DBpedia gathering of labels, II. Local filtering of labels and III. FreeDB validation and completion.
 
-I. DBPedia
-(a) withdraw list of \textit{dbo:wikiPageRedirect}
-(b) if search term is a redirect $\rightarrow$ follow redirect and (a)
 
-II. Filter 
-DBPedia has redirects for different brands of the same drug, ATC codes and chemical formulas. Fortunately ATC code label contain \_code\_ and (most) formulas end with \_acid. Therefore an entity with these labels does not need to be considered in III.
+\subparagraph{I. DBPedia} contains information about which drug brands exist by considering them as the same entity as the active substance and redirecting them with \textit{dbo:wikiPageRedirect}. The case the active substance is the input, a list of redirects can be obtained directly. In case a brand name is searched, the redirect has to be followed to the corresponding active substance entity to obtain the list.
 
-III. FreeBase
-(a) Check if search term is a \textit{drug\_brand} receive \textit{manufacturer}, a list of \textit{products} and the \textit{website} of the manufacturer.
-(b) For each of the products, receive \textit{manufacturer} and \textit{website}. 
-Remark: it is possible that different products of the same brand are produced from different manufacturer.
-(c) In case FreeBase has no separate entity for a search term, it might still has it as a alias for a \text{drug}.
+\subparagraph{II. Filtering}
+The list contains labels for different brands of the same drug, ATC codes and chemical formulas. Fortunately ATC code label contain \_code\_ and (most) formulas end with \_acid. Therefore all list items with match the corresponding regular expression can be deleted. Still some ATC codes and formulas might pass the current regex ($\rightarrow$ p. \pageref{limitations:filtering}).
+
+\subparagraph{III. FreeDB}
+The filtered list is used as input for FreeBase. The FB queries can be seperated in two cases: In the first case the search term is a \textit{drug\_brand} and FB has information about \textit{manufacturer}, which is the brand holder, a list of \textit{products} and the \textit{website} of the manufacturer. Afterwards new queries for each item on the products list, will return the corresponding \textit{manufacturer} of the specific product and the products \textit{website}. In the second case FB has no separate entity for a search term, it might still has it as a alias for a \text{drug} to verify it´s a drug brand.
 
 
 \chapter{Techniques Used}
@@ -202,14 +199,9 @@ To ensure a user-friendly field trial, a web application was developed. It's bas
 \textbf{SPARQL}, a query language to access Resource Description Framework (RDF) data, is used to access DBPedia via it's SPARQL endpoint. On client side \textbf{SPARQLWrapper}\footnote{\url{https://rdflib.github.io/sparqlwrapper/}} is used to facilitate the query creation and result converting. 
 
 \label{mql}
-Metaweb Query Language \textbf{MQL}\footnote{\url{https://developers.google.com/freebase/v1/mql-overview}}, is the endorsed way to access information from FreeBase. MQL was chosen since the official SPARQL endpoint\footnote{\url{http://www.freebase.com/base/sparql}} of FreeBase is offline, the FactForge endpoint\footnote{\url{http://factforge.net/sparql}} is unreliable and slow and a local installation would consume with 250GB\footnote{\url{https://developers.google.com/freebase/data}} too much space for testing purposes. $\rightarrow$ p. \pageref{}
+Metaweb Query Language \textbf{MQL}\footnote{\url{https://developers.google.com/freebase/v1/mql-overview}}, is the endorsed way to access information from FreeBase. MQL was chosen since the official SPARQL endpoint\footnote{\url{http://www.freebase.com/base/sparql}} of FreeBase is offline, the FactForge endpoint\footnote{\url{http://factforge.net/sparql}} is unreliable and slow and a local installation would consume with 250GB\footnote{\url{https://developers.google.com/freebase/data}} too much space for testing purposes.
 
 Since the discontinuance of freebase ($\rightarrow$ p. \pageref{prob:freebase}) registration is impossible. Unfortunately the official freebase python wrapper \footnote{\url{https://code.google.com/p/freebase-python/}} requires a user account and can therefore not be used. Due to this a homegrown MQL wrapper, to access the web MQL client, was written.
-
-
-
-  \paragraph{TODO}
-\label{TODO}
 
 
 \chapter{Evaluation}
@@ -257,6 +249,7 @@ To replicate the example results, please enter the corresponding search term on 
 \label{example:lustral}
 \end{center}
 
+For the Lustral query the result set contains a drug brand with a corresponding owner (Nr. 30, Zoloft, is owned by Pfizer), yet the product itself is manufactured from another company (Roerig, Inc). Furthermore 5 drug brands (Nr. 1 until Nr. 5) without any further information ($\rightarrow$ p. \pageref{limitations:fb_drugs}), a chemical formula with incorrect syntax (Nr. 6, C17H17Cl2N) ($\rightarrow$ p. \pageref{limitations:filtering}) and duplicate products ($\rightarrow$ p. \pageref{limitations:dubplicates}).
 
 \begin{center}
 \begin{tabular}{rccll}
@@ -264,18 +257,6 @@ To replicate the example results, please enter the corresponding search term on 
  & \textbf{Product Name} &\textbf{ Manufacturer}  \\ 
 \hline 
 1 & Concerta &  \\ 
-\hline 
-...  &  &  \\ 
-\hline 
-2 & Apo-Sertraline & \\ 
-\hline 
-3 & Asentra &  \\ 
-\hline 
-4 & Atruline	 &  \\ 
-\hline 
-5 & Besitran	 &  \\ 
-\hline 
-6 & C17H17Cl2N &  \\ 
 \hline 
 ...  &  &  \\ 
 \hline 
@@ -313,19 +294,17 @@ To replicate the example results, please enter the corresponding search term on 
 \label{example:ritalin}
 \end{center}
 
-
-
-
-TODO S
+For the Ritalin query the corresponding result set contains an example for a drug brand (Nr. 28 Methylin) which uses multiple manufacturers for it's products: Shionogi for solutions and chewable tablets and Mallinckrodt for regular tablets. Furthermore it contains the french name of Ritalin brand (Nr. 67, Ritaline).
 
 \paragraph{Field Trial}
 \label{cha:field_trial}
-A field trial with 35 testers was conducted from 6th of December 2015 until the 8th of December.
+\label{field_trial}
+A field trial with 35 testers was conducted from 6th until the 8th of December 2015.
 
 Thanks to the support of Dr. Diana Bursan (Iuliu Hațieganu University of Medicine and Pharmacy) 11 Romanian medical experts delivered feedback from a professional point of view (group A). This is in particular important because the target user group described on page \pageref{cha:domain} can not rate the quality and completeness of the results.
 In addition 24 random non-experts (group B) from Germany, Romania and Canada participated and represented the target user group, their feedback will be discussed in the outcome section on page \pageref{outcome}. 
 
-A total of 309 queries\footnote{Queries are conducted anonymously, so there is no information about which group conducted them.} was analyzed. 184 queries returned results (59.5\%), 102 were misspelled, which mostly was due to the first letter being lowercase or the brand name in foreign languages (33.0\%), and 23 (7.5\%) did not return any results.  
+A total of 309 queries\footnote{Queries are conducted anonymously, so there is no information about which group conducted them.} was analyzed. 184 queries returned results (59.5\%), 102 were misspelled (33.0\%), which mostly was due to the first letter being lowercase or the brand name in foreign languages , and 23 (7.5\%) did not return any results.  
 
 \paragraph{Quality of knowledge base linkage}
 \label{cha:example}
@@ -336,21 +315,24 @@ TODO S
 \label{outcome}
 % What outcomes does the application provide?
 % TODO: what is meant by "outcome"?
-To quantify the outcome a field trial has been conducted ($\rightarrow$ p. \pageref{cha:field_trial}). Group \textbf{(A)} consists of medical professionals and \textbf{(B)} the target user group.
+To quantify the outcome a field trial has been conducted ($\rightarrow$ p. \pageref{cha:field_trial}). Group (A) consists of medical professionals and (B) the target user group.
 
-\textbf{(A) medical experts} stated that the majority of brands in the result set are from the North American market and many European brands are not contained. Furthermore many brands have different names in different languages, in the fewest cases those ones are considered.
+(A) medical experts: stated that the majority of brands in the result set are from the North American market and many European brands are not contained. Furthermore many brands have different names in different languages, in the fewest cases those ones are considered.
 
-\textit{"Generics search helped me as a foreign doctor abroad in finding immediately the commercial names of all drugs."} - Dr. Dalia Onetiu, Romanian Doctor working in France
+\begin{center}
+\textit{"Very convenient while working abroad."}\linebreak
+- Dr. Dalia Onetiu, Romanian doctor working in France
+\end{center}
 
-\textbf{(B) target user group} The biggest obstacle for the target user group is the correct spelling of the sometimes unusual drug names. Furthermore the tend to search for over-the-counter drug cocktails (e.g. Neo Citran) which are not considered in the search at all.
+(B) target user group: The biggest obstacle for the target user group is the correct spelling of the sometimes unusual drug names. Furthermore they tend to search for over-the-counter drug cocktails (e.g. Neo Citran) which are not considered in the search at all.
 
 \paragraph{Conclusion}
 \label{conclusion}
 
-On obstacles remains for the non-expert target user group: 
+One obstacles remains for the non-expert target user group: 
 A large percentage of over-the-counter drugs often contain multiple active substances (e.g. a pain killer + caffeine is a common combination). Those ones can not be found by this approach, since DBPedia only considers two drugs to be the same when they contain the the same substance and no other active substances.
 
-Based on the field study and the analyzed queries the results cater more to a professional user group than initially expected. Therefore the rational conclusion is to change the focus to an medical expert target group and cater to their need.
+Based on the field study and the analyzed queries the results cater more to a professional user group than initially expected. Therefore the rational conclusion is to change the focus to an medical expert target group and cater to their need. The next logical features for this user group have been extracted from the field study feedback: information about the active substance and it's side effect, as well as information about the country in which a drug brand is sold.
 
 
 % TODO: Aspirin (drug from Bayer) among them Ecotrin ($\rightarrow$ finds 2 manufacturers for Ecotrin + generics)
@@ -364,26 +346,27 @@ Based on the field study and the analyzed queries the results cater more to a pr
 
 
 
-
 \paragraph{FreeBase}
 \label{prob:freebase}
 Google decided to discontinue FreeBase in June 2015\footnote{\url{https://plus.sandbox.google.com/109936836907132434202/posts/bu3z2wVqcQc}} to support the growth of Wikidata, which does currently not contain the information this project requires. Due to this the project switched into read-only mode and the knowledge will not further expand. The only possibility for the search engine to improve is if DBPedia adds new redirects for which FreeDB already contains information. 
 
 
-\paragraph{drug\_brands}
+\paragraph{Aliases vs. drug brands}
 \label{limitations:fb_drugs} 
 In case that a drug brand is only known due to it's \textit{alias} on FB, it holds the same information as it's corresponding \textit{wikiPageRedirects} from DB. Due to this additional information about the \textit{manufacturer} or \textit{website} can be obtained.
 
 
 \paragraph{Filtering}
 \label{limitations:filtering}
-In some cases DBPedia redirects form syntactically incorrect chemical formulas and APC codes ($\rightarrow$ p. \pageref{filtering}) \textbf{Workaround} A more elaborated regular expression for filtering.
+In some cases DBPedia redirects form syntactically incorrect chemical formulas (see Lustral example on $\rightarrow$ p. \pageref{example:lustral}) and APC codes. \textbf{Workaround} A more elaborated regular expression for filtering.
 
 \paragraph{Ownership over time}
 % TODO: formulate
 FreeBase does not consider the time dimension for ownership. Therefore multiple drug manufacturers can be found for the same brand if the brand was e.g. sold. An example is Ecotrin ($\rightarrow$ p. \pageref{ex:ecotrin}) which was developed and produced by GlaxoSmithKline. In 2011 it was sold in bundle deal to Prestige Brands, which is its current manufacturer.
 % TODO: formulate
 \textbf{Workaround} crawl information from trademark registers. Add information about production time frames to output, since drugs produced from previous brand owners could still be queried.
+
+Furthermore for manufactured products a manufacturer change is sometimes contained by an additional entity, which only has a different manufacturer as difference. See \textbf{Dubplicate products} for more details
 
 \paragraph{Quantity of active substance}
 % TODO: formulate
@@ -392,39 +375,29 @@ DBPedia does refer all generics to a single entity, it does not contain informat
 \textbf{Workaround} filter quantity from user input and check it on corresponding FreeDB pages.
 
 
-\paragraph{Dubplicate products}
+\paragraph{Duplicate products}
 \label{limitations:dubplicates} 
-$\rightarrow	$ p. \pageref{example:ritalin}
+The current MQL query receives the manufacturer due to the label of the manufactured product. Due to this only one manufacturer is shown in the result set for entities with the same label. An exmaple is \textit{Methylin 10 tablet}, from out Ritalin example on  p. \pageref{example:ritalin}, which has two entities in freebase \url{http://www.freebase.com/m/0hqprm_} manufactured by Mallinckrodt and \url{http://www.freebase.com/m/0hqh8ty} manufactured by Golden State Medical Supply. \textbf{Remark} there are dates stored for the start and end of related marketing campaign. Based on this an assumption could be made which one is the current manufacturer, yet this would not be reasonable proof. \textbf{Workaround} a more elaborated query which follows the links of the corresponding entities, instead of withdrawing a manufacturer for the label of the manufactured product.
 
-31	Methylin 10 tablet	Mallinckrodt
-36	Methylin 10 tablet	Mallinckrodt
 
 \paragraph{Impossible queries}
 \label{drug_cocktail}
-\subparagraph{Multi ingredient drugs} No multi ingredient drugs e.g. "Neo Citran". Because DBPedia does not consider it as a SameAs relationship $\rightarrow$ no generics found.
+\subparagraph{Multi ingredient drugs} No multi-ingredient drugs e.g. "Neo Citran" can be found with this approach. This is due to the fact that DBPedia does not consider it as a wikiPageRedirect relationship $\rightarrow$. this is only the case for pure active substances.
 
-\subparagraph{Drugs not listen as sameAs}
-\label{drug_sameAs}
-% TODO: formulate
-If a drug is not linked correctly on DBPedia, e.g. it has an own page, even if the ingredients are identical, the search wont function.
-
-\subparagraph{Drugs brands with different names}
+\subparagraph{Drugs brands in differnt languages}
 \label{drug_foregin_name}
+Many drug brands use different names in different languages, e.g. Aspirin in English, Aspirine in French and Aspirin\u{a} in Romanian. Since the Romanian spelling is not known to DBPedia it cant be searched. This is apparently the case for many other languages and drugs. \textbf{Workaround} the search term could be send to an online dictionary, which is able to identify languages e.g. Google translate.
 % TODO: formulate
 
-\subparagraph{Spell check}
+\subparagraph{Spelling}
 \label{drug_spellcheck}
-% TODO: formulate
+The field study has shown that the target user group of non-expert has increased problems in spelling drug names correctly. \textbf{Workaround} connecting the search engine with an online spell check e.g. the Google spell check API.
 
-\paragraph{Lessons learned}
+
+
+\paragraph{Lessons learned \& Challenges overcame}
 \label{cha:lessons}
-%TODO: at the end
 
-
-% TODO: delete?
-
-
-\paragraph{Challenges}
 \label{challenges}
 
 \subparagraph{Knowledge base selection} Our initial project proposal, searching manufacturers of certain product categories and visualizing them on Google maps, had to be discarded, since ProductDB was shut down, no dump is available and the only known maintainer is unreachable. Furthermore the usage of FreeBase is sub-optimal since it is discontinued. Yet we did not find an alternative source for the drug details we required. 
