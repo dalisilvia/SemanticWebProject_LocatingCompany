@@ -20,6 +20,9 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
+
+\usepackage{caption}
+
 % well, when your work is concerned with definitions, proposition and so on, we suggest this
 % feel free to add Corrolary, Theorem or whatever you need
 \newtheorem{definition}{Definition}
@@ -136,35 +139,29 @@ The search engine is designed for private individuals, without any medical exper
 \paragraph{Datasets used}
 \label{datasets_used}
 % which datasets does the application use
-The application uses drug datasets extracted from DBPedia (DB) and FreeBase (FB) with correspondent SPARQL query.
+The application accesses drug related data from DBPedia (DB) and FreeBase (FB).
+
+\subparagraph{DBPedia vs. FreeBase}
+\label{db_vs_fb}
+Both DB and FB are based on information extracted from Wikipedia and the schema mappings can be edited. Yet FB imported data from a wide variety of additional resources and was user-editable, while DB can only be edited by editing Wikipedia content. Another difference is that DB uses regular RDF triplets to store data, while FB uses n-tuples.\footnote{\url{http://wiki.freebase.com/wiki/DBPedia}}.
 
 \subparagraph{DBPedia}
 \label{dbpedia}
-% TODO S: describe DBPedia (important: dont copy and paste + cite correctly!)
-fetches all alternative generics of the targeted drug by a certain propery \textit{ dbo:wikiPageRedirects\footnote{\url{http://dbpedia.org/ontology/wikiPageRedirects}}} and then saves the results name as an input for FreeBase dataset.
+
+DB considers all drug brands for the same active substance as the same entity. It contains a \textit{dbo:wikiPageRedirects\footnote{\url{http://dbpedia.org/ontology/wikiPageRedirects}}} for each drug brand, active substance or ATC code. The extraction of the brand names is explained on page \pageref{filtering}.
 
 
 \subparagraph{FreeBase}
 \label{freebase}
-% TODO S: describe FreeBase (important: dont copy and paste + cite correctly!)
-searches drug manufacturers for every alternative generics and integrate the result to users.
 
-($\rightarrow$ page \pageref{prob:freebase})
-
-
-\subparagraph{DBPedia vs. FreeBase}
-\label{db_vs_fb}
-
-\footnote{\url{http://wiki.freebase.com/wiki/DBPedia}}
-
-
+FB holds additional information about drug brands in two entities. For some  drugs it contains a \textit{drug\_brand}, which contains \textit{manufactured products} of the brand (e.g. Ecotrin 325 coated tablet is a manufactured product of the \textit{drug\_brand} Ecotrin. Additionally the \textit{manufacturer} and \textit{website} is stored for \textit{drug\_brand} and \textit{manufactured products}.
+For the drug brands where no additional information beside the label is contained, it is stored as \textit{alias} in a \textit{drug} entity ($\rightarrow$ p. \pageref{limitations:fb_drugs}).  A variety of issues due to the discontinuance of FB is discussed on page \pageref{prob:freebase}.
 
 
 
 \paragraph{Access methods}
 \label{access_methods}
-% how are they accessed
-% TODO S: Which access methods did we chose and why did we chose them?
+In consequence of the the endorsed accessing ways SPARQL ($\rightarrow$ p. \pageref{sparql}) is used for FB and MQL ($\rightarrow$ p. \pageref{mql}) for FB. Both are accessed online v9a the official SPARQL endpoint\footnote{\url{http://dbpedia.org/sparql}} of DB and the official MQL google web API\footnote{\url{https://www.googleapis.com/freebase/v1/mqlread}} for freebase. Accessing FB via SPARQL is currently sub-optimal, the reason for this is discussed on page \pageref{challenges:fb}.
 
 
 
@@ -192,25 +189,22 @@ Remark: it is possible that different products of the same brand are produced fr
 
 
 
-The techniques applied in our project will be discussed in this section. The viable prototype, which was also used for the field trial ($\rightarrow$ page \pageref{field_trial}), is available at \url{http://generics.markus-dietsche.de}.
+The techniques applied in our project will be discussed in this section. The viable prototype, which was also used for the field trial ($\rightarrow$ p. \pageref{field_trial}), is available at \url{http://generics.markus-dietsche.de}.
 
 \paragraph{Prototype}
 \label{prototype}
 
 
 To ensure a user-friendly field trial, a web application was developed. It's based on 
-Django\footnote{\url{https://www.djangoproject.com/}}, a framework for web applications written in Python and Bootstrap\footnote{\url{https://getbootstrap.com/}} a web frontend framework.
+\textbf{Django}\footnote{\url{https://www.djangoproject.com/}}, a framework for web applications written in \textbf{Python} and \textbf{Bootstrap}\footnote{\url{https://getbootstrap.com/}} a web frontend framework.
 
-SPARQL, a query language to access Resource Description Framework (RDF) data, is used to access DBPedia via it's SPARQL endpoint. On client side SPARQLWrapper\footnote{\url{https://rdflib.github.io/sparqlwrapper/}} is used to facilitate the query creation and result converting. 
+\label{sparql}
+\textbf{SPARQL}, a query language to access Resource Description Framework (RDF) data, is used to access DBPedia via it's SPARQL endpoint. On client side \textbf{SPARQLWrapper}\footnote{\url{https://rdflib.github.io/sparqlwrapper/}} is used to facilitate the query creation and result converting. 
 
+\label{mql}
+Metaweb Query Language \textbf{MQL}\footnote{\url{https://developers.google.com/freebase/v1/mql-overview}}, is the endorsed way to access information from FreeBase. MQL was chosen since the official SPARQL endpoint\footnote{\url{http://www.freebase.com/base/sparql}} of FreeBase is offline, the FactForge endpoint\footnote{\url{http://factforge.net/sparql}} is unreliable and slow and a local installation would consume with 250GB\footnote{\url{https://developers.google.com/freebase/data}} too much space for testing purposes. $\rightarrow$ p. \pageref{}
 
-Metaweb Query Language MQL\footnote{\url{https://developers.google.com/freebase/v1/mql-overview}}, is the endorsed way to access information from FreeBase. MQL was chosen since the official SPARQL endpoint\footnote{\url{http://www.freebase.com/base/sparql}} of FreeBase is offline, the FactForge endpoint\footnote{\url{http://factforge.net/sparql}} is unreliable and slow and a local installation would consume with 250GB\footnote{\url{https://developers.google.com/freebase/data}} too much space for testing purposes. $\rightarrow$ page \pageref{}
-
-
-Freebase stores information in n-tuples, unlike DBpedia which stores data in RDF triplets. Therefore MQL queries against FreeBase are easier to write than SPARQL queries.
-
-
-Since the discontinuance of freebase (page \pageref{prob:freebase}) registration is impossible. Unfortunately the official freebase python wrapper \footnote{\url{https://code.google.com/p/freebase-python/}} requires a user account and can therefore not be used. Due to this a homegrown MQL wrapper, to access the web MQL client, was written.
+Since the discontinuance of freebase ($\rightarrow$ p. \pageref{prob:freebase}) registration is impossible. Unfortunately the official freebase python wrapper \footnote{\url{https://code.google.com/p/freebase-python/}} requires a user account and can therefore not be used. Due to this a homegrown MQL wrapper, to access the web MQL client, was written.
 
 
 
@@ -222,7 +216,105 @@ Since the discontinuance of freebase (page \pageref{prob:freebase}) registration
 \label{cha:evaluation}
 
 \paragraph{Example results}
-\label{cha:example}
+
+To replicate the example results, please enter the corresponding search term on \url{http://generics.markus-dietsche.de}. Due to the size of most result sets only extracts will be discussed in this section.
+
+\begin{center}
+\begin{tabular}{rccll}
+\hline 
+ & \textbf{Product Name} &\textbf{ Manufacturer}  \\ 
+\hline 
+1 & Altruline &  \\ 
+\hline 
+2 & Apo-Sertraline & \\ 
+\hline 
+3 & Asentra &  \\ 
+\hline 
+4 & Atruline	 &  \\ 
+\hline 
+5 & Besitran	 &  \\ 
+\hline 
+6 & C17H17Cl2N &  \\ 
+\hline 
+...  &  &  \\ 
+\hline 
+30 & Zoloft &	Pfizer \\ 
+\hline 
+31 & Zoloft 50 film coated tablet & Roerig, Inc \\ 
+\hline 
+32 & Zoloft 25 film coated tablet & Roerig, Inc \\ 
+\hline 
+33 & Zoloft 50 film coated tablet & Roerig, Inc \\ 
+\hline 
+34 & Zoloft 100 film coated tablet & Roerig, Inc \\ 
+\hline 
+35 & Zoloft 20 concentrate solution & Roerig, Inc \\ 
+\hline 
+36 & Zoloft 100 film coated tablet & Roerig, Inc \\ 
+\hline 
+\end{tabular}
+\captionof{table}{Extract of results for "Lustral"} 
+\label{example:lustral}
+\end{center}
+
+
+\begin{center}
+\begin{tabular}{rccll}
+\hline 
+ & \textbf{Product Name} &\textbf{ Manufacturer}  \\ 
+\hline 
+1 & Concerta &  \\ 
+\hline 
+...  &  &  \\ 
+\hline 
+2 & Apo-Sertraline & \\ 
+\hline 
+3 & Asentra &  \\ 
+\hline 
+4 & Atruline	 &  \\ 
+\hline 
+5 & Besitran	 &  \\ 
+\hline 
+6 & C17H17Cl2N &  \\ 
+\hline 
+...  &  &  \\ 
+\hline 
+28	&Methylin	&\\ 
+\hline  
+29	&Methylin 5 solution	&Shionogi \\ 
+\hline  
+30	&Methylin 10 solution	&Shionogi \\ 
+\hline 
+31	&Methylin 10 tablet	&Mallinckrodt \\ 
+\hline 
+32	&Methylin 20 tablet	&Mallinckrodt \\ 
+\hline 
+33	&Methylin 5 tablet	&Mallinckrodt \\ 
+\hline 
+34	&Methylin 5 chewable tablet	&Shionogi \\ 
+\hline 
+35	&Methylin 2.5 chewable tablet	&Shionogi \\ 
+\hline 
+36	&Methylin 10 tablet	&Mallinckrodt \\ 
+\hline 
+37	&Methylin 5 tablet	&Mallinckrodt \\ 
+\hline 
+38	&Methylin 20 tablet	&Mallinckrodt \\ 
+\hline 
+39	&Methylin 10 chewable tablet	&Shionogi\\ 
+\hline 
+...  &  &  \\ 
+\hline  
+
+67 & Ritaline &  \\ 
+\hline 
+\end{tabular}
+\captionof{table}{Extract of results for "Ritalin"} 
+\label{example:ritalin}
+\end{center}
+
+
+
 
 TODO S
 
@@ -244,7 +336,7 @@ TODO S
 \label{outcome}
 % What outcomes does the application provide?
 % TODO: what is meant by "outcome"?
-To quantify the outcome a field trial has been conducted ($\rightarrow$ page \pageref{cha:field_trial}). Group \textbf{(A)} consists of medical professionals and \textbf{(B)} the target user group.
+To quantify the outcome a field trial has been conducted ($\rightarrow$ p. \pageref{cha:field_trial}). Group \textbf{(A)} consists of medical professionals and \textbf{(B)} the target user group.
 
 \textbf{(A) medical experts} stated that the majority of brands in the result set are from the North American market and many European brands are not contained. Furthermore many brands have different names in different languages, in the fewest cases those ones are considered.
 
@@ -270,22 +362,26 @@ Based on the field study and the analyzed queries the results cater more to a pr
 \chapter{Known limitations}
 \label{cha:limiations}
 
-%{S_note}
-%The result of DBPedia may have different value format from Freebase.
 
-%The DBPedia results also contain active substances which may result in wrong %manufacturers from Freebase.
 
 
 \paragraph{FreeBase}
 \label{prob:freebase}
 Google decided to discontinue FreeBase in June 2015\footnote{\url{https://plus.sandbox.google.com/109936836907132434202/posts/bu3z2wVqcQc}} to support the growth of Wikidata, which does currently not contain the information this project requires. Due to this the project switched into read-only mode and the knowledge will not further expand. The only possibility for the search engine to improve is if DBPedia adds new redirects for which FreeDB already contains information. 
 
-\paragraph{Filtering}
-In some cases DBPedia redirects form syntactically incorrect chemical formulas and APC codes ($\rightarrow$ page \pageref{filtering}) \textbf{Workaround} A more elaborated regular expression for filtering.
 
-\paragraph{Current manufacturer}
+\paragraph{drug\_brands}
+\label{limitations:fb_drugs} 
+In case that a drug brand is only known due to it's \textit{alias} on FB, it holds the same information as it's corresponding \textit{wikiPageRedirects} from DB. Due to this additional information about the \textit{manufacturer} or \textit{website} can be obtained.
+
+
+\paragraph{Filtering}
+\label{limitations:filtering}
+In some cases DBPedia redirects form syntactically incorrect chemical formulas and APC codes ($\rightarrow$ p. \pageref{filtering}) \textbf{Workaround} A more elaborated regular expression for filtering.
+
+\paragraph{Ownership over time}
 % TODO: formulate
-FreeBase does not consider the time dimension for ownership. Therefore multiple drug manufacturers can be found for the same brand if the brand was e.g. sold. An example is Ecotrin ($\rightarrow$ page \pageref{ex:ecotrin}) which was developed and produced by GlaxoSmithKline. In 2011 it was sold in bundle deal to Prestige Brands, which is its current manufacturer.
+FreeBase does not consider the time dimension for ownership. Therefore multiple drug manufacturers can be found for the same brand if the brand was e.g. sold. An example is Ecotrin ($\rightarrow$ p. \pageref{ex:ecotrin}) which was developed and produced by GlaxoSmithKline. In 2011 it was sold in bundle deal to Prestige Brands, which is its current manufacturer.
 % TODO: formulate
 \textbf{Workaround} crawl information from trademark registers. Add information about production time frames to output, since drugs produced from previous brand owners could still be queried.
 
@@ -296,6 +392,12 @@ DBPedia does refer all generics to a single entity, it does not contain informat
 \textbf{Workaround} filter quantity from user input and check it on corresponding FreeDB pages.
 
 
+\paragraph{Dubplicate products}
+\label{limitations:dubplicates} 
+$\rightarrow	$ p. \pageref{example:ritalin}
+
+31	Methylin 10 tablet	Mallinckrodt
+36	Methylin 10 tablet	Mallinckrodt
 
 \paragraph{Impossible queries}
 \label{drug_cocktail}
@@ -325,11 +427,11 @@ If a drug is not linked correctly on DBPedia, e.g. it has an own page, even if t
 \paragraph{Challenges}
 \label{challenges}
 
-\subparagraph{Selection of knowledge bases} Our initial project proposal, searching manufacturers of certain product categories and visualizing them on Google maps, had to be discarded, since ProductDB was shut down, no dump is available and the only known maintainer is unreachable. Furthermore the usage of FreeBase is sub-optimal since it is discontinued. Yet we did not find an alternative source for the drug details we required. 
+\subparagraph{Knowledge base selection} Our initial project proposal, searching manufacturers of certain product categories and visualizing them on Google maps, had to be discarded, since ProductDB was shut down, no dump is available and the only known maintainer is unreachable. Furthermore the usage of FreeBase is sub-optimal since it is discontinued. Yet we did not find an alternative source for the drug details we required. 
 
 
 \subparagraph{FreeBase access}
-\label{challenges}
+\label{challenges:fb}
 To gain stable access to FreeBase (FB) was harder than expected. Since the official SPARQL endpoint is offline, FactForge was initially chosen, as the only publicly available replacement. Yet it turned out that it's unreliably slow and occasionally unreachable. Since the data dump has a uncompressed size of 250 GB a local instance was not an option. 
 So we decided to use the endorsed way to access FB: MQL. After the queries have been rewritten and tested in the FB online MQL client it turned out that the official MQL wrapper requires a FB account, and the registration is closed for good.
 Luckily there is an MQL web API from google, which returns the results as JSON. Based on this we developed a homebrewn wrapper for the web API.
