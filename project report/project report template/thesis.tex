@@ -218,19 +218,41 @@ Since the discontinuance of freebase (page \pageref{prob:freebase}) registration
 \paragraph{Example results}
 \label{cha:example}
 
+TODO S
+
 \paragraph{Field Trial}
+\label{cha:field_trial}
+A field trial with 35 testers was conducted from 6th of December 2015 until the 8th of December.
+
+Thanks to the support of Dr. Diana Bursan (Iuliu Hațieganu University of Medicine and Pharmacy) 11 Romanian medical experts delivered feedback from a professional point of view (group A). This is in particular important because the target user group described on page \pageref{cha:domain} can not rate the quality and completeness of the results.
+In addition 24 random non-experts (group B) from Germany, Romania and Canada participated and represented the target user group, their feedback will be discussed in the outcome section on page \pageref{sec:outcome}. 
+
+A total of 309 queries\footnote{Queries are conducted anonymously, so there is no information about which group conducted them.} was analyzed. 184 queries returned results (59.5\%), 102 were misspelled, which mostly was due to the first letter being lowercase or the brand name in foreign languages (33.0\%), and 23 (7.5\%) did not return any results.  
+
+\paragraph{Quality of knowledge base linkage}
 \label{cha:example}
 
-\paragraph{Quality of dataset combination}
-\label{cha:example}
+TODO S
 
 \paragraph{Outcome}
 \label{sec:outcome}
 % What outcomes does the application provide?
 % TODO: what is meant by "outcome"?
+To quantify the outcome a field trial has been conducted (-> page \pageref{cha:field_trial}). Group \textbf{(A)} consists of medical professionals and \textbf{(B)} the target user group.
 
-\paragraph{Queries}
-\label{sec:query}
+\textbf{(A) medical experts} stated that the majority of brands in the result set are from the North American market and many European brands are not contained. Furthermore many brands have different names in different languages, in the fewest cases those ones are considered.
+
+\textit{"Generics search helped me as a foreign doctor abroad in finding immediately the commercial names of all drugs."} - Dr. Dalia Onetiu, Romanian Doctor working in France
+
+\textbf{(B) target user group} The biggest obstacle for the target user group is the correct spelling of the sometimes unusual drug names. Furthermore the tend to search for over-the-counter drug cocktails (e.g. Neo Citran) which are not considered in the search at all.
+
+\paragraph{Conclusion}
+\label{sec:conclusion}
+
+On obstacles remains for the non-expert target user group: 
+A large percentage of over-the-counter drugs often contain multiple active substances (e.g. a pain killer + caffeine is a common combination). Those ones can not be found by this approach, since DBPedia only considers two drugs to be the same when they contain the the same substance and no other active substances.
+
+Based on the field study and the analyzed queries the results cater more to a professional user group than initially expected. Therefore the rational conclusion is to change the focus to an medical expert target group and cater to their need.
 
 
 % TODO: Aspirin (drug from Bayer) among them Ecotrin (-> finds 2 manufacturers for Ecotrin + generics)
@@ -270,13 +292,21 @@ DBPedia does refer all generics to a single entity, it does not contain informat
 
 
 \paragraph{Impossible queries}
-\label{sec:unquery}
-\subparagraph{Multi ingredient drugs}No multi ingredient drugs e.g. "Neo Citran". Because DBPedia does not consider it as a SameAs relationship -> no generics found.
+\label{sec:drug_cocktail}
+\subparagraph{Multi ingredient drugs} No multi ingredient drugs e.g. "Neo Citran". Because DBPedia does not consider it as a SameAs relationship -> no generics found.
 
 \subparagraph{Drugs not listen as sameAs}
+\label{sec:drug_sameAs}
 % TODO: formulate
 If a drug is not linked correctly on DBPedia, e.g. it has an own page, even if the ingredients are identical, the search wont function.
 
+\subparagraph{Drugs brands with different names}
+\label{sec:drug_foregin_name}
+% TODO: formulate
+
+\subparagraph{Spell check}
+\label{sec:drug_spellcheck}
+% TODO: formulate
 
 \paragraph{Lessons learned}
 \label{cha:lessons}
@@ -284,23 +314,19 @@ If a drug is not linked correctly on DBPedia, e.g. it has an own page, even if t
 
 
 % TODO: delete?
-\paragraph{Use datasets with multiple maintainers} since our initial project proposal, searching manufacturers of certain product categories and visualizing them on Google maps, had to be discarded, since ProductDB was shut down and the only maintainer was unreachable.
 
 
 \paragraph{Challenges}
 \label{sec:challenges}
 
-1. SameAs 
-2. Time
+\subparagraph{Selection of knowledge bases} Our initial project proposal, searching manufacturers of certain product categories and visualizing them on Google maps, had to be discarded, since ProductDB was shut down, no dump is available and the only known maintainer is unreachable. Furthermore the usage of FreeBase is sub-optimal since it is discontinued. Yet we did not find an alternative source for the drug details we required. 
 
-\paragraph{Biggest Obstacles}
-\label{sec:obstacle}
 
-%\section{More ideas} % TODO S: where does this section come from?
-\label{sec:idea}
-
-%\bibliographystyle{plain} %TODO: we might not need it.
-%\bibliography{thesis-ref} %TODO: we might not need it.
+\subparagraph{FreeBase access}
+\label{sec:challenges}
+To gain stable access to FreeBase (FB) was harder than expected. Since the official SPARQL endpoint is offline, FactForge was initially chosen, as the only publicly available replacement. Yet it turned out that it's unreliably slow and occasionally unreachable. Since the data dump has a uncompressed size of 250 GB a local instance was not an option. 
+So we decided to use the endorsed way to access FB: MQL. After the queries have been rewritten and tested in the FB online MQL client it turned out that the official MQL wrapper requires a FB account, and the registration is closed for good.
+Luckily there is an MQL web API from google, which returns the results as JSON. Based on this we developed a homebrewn wrapper for the web API.
 
 
 \appendix
